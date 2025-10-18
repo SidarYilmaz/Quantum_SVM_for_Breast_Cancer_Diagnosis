@@ -1,0 +1,1 @@
+A project exploring the application of Quantum Support Vector Machines (QSVM) for the classification of high-dimensional mammography data. This repository includes implementations and experiments using Python, Qiskit, and PennyLane, following the principles outlined in "A Practical Guide to Quantum Machine Learning and Quantum Optimization".
