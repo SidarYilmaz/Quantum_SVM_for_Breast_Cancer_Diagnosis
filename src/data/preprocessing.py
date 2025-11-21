@@ -65,7 +65,7 @@ def prepare_features_and_labels(
         positive_label -> 1
         negative_label -> 0
     - Drops label column from features.
-    - Drops 'id' column if present.
+    - Drops 'id' and any fully-NaN columns if present.
     - Keeps only numeric feature columns.
     """
     if label_column not in df.columns:
@@ -83,14 +83,30 @@ def prepare_features_and_labels(
     feature_df = df.drop(columns=[label_column])
 
     # Drop 'id' column if it exists
+    drop_cols = []
     if "id" in feature_df.columns:
-        feature_df = feature_df.drop(columns=["id"])
+        drop_cols.append("id")
+
+    # (OPTIONAL) still try to drop by name if it matches exactly
+    if "Unnamed: 32" in feature_df.columns:
+        drop_cols.append("Unnamed: 32")
+
+    if drop_cols:
+        feature_df = feature_df.drop(columns=drop_cols)
+
+    # NEW: drop any columns that are fully NaN
+    all_nan_cols = [c for c in feature_df.columns if feature_df[c].isna().all()]
+    if all_nan_cols:
+        print("Dropping all-NaN columns:", all_nan_cols)
+        feature_df = feature_df.drop(columns=all_nan_cols)
 
     # Keep only numeric columns
     feature_df = feature_df.select_dtypes(include=[np.number])
 
     X = feature_df.values
     return X, y
+
+
 
 
 # ==========================
