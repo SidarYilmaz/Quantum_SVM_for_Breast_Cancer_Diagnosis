@@ -10,6 +10,6 @@ dist/
 build/
 .ipynb_checkpoints/
 .vscode/
-data/
+/data/
 reports/
 Thumbs.db
